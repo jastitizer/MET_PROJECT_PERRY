@@ -1,0 +1,349 @@
+<!--
+%
+% This code is part of a suite of software developed under the guidance of
+% Dr. Sandra Yuter and the Cloud Precipitation Processes and Patterns Group
+% at North Carolina State University.
+% Copyright (C) 2013 Spencer Rhodes and Andrew Hall
+% 
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%
+-->
+
+<!-- MESSAGE TO PERSON EDITING THIS HTML FILE:
+  Comment sections beginning with the keyword "CHANGES" indicate where changes are recommended or allowed.  If you make
+  changes to any other part of the html file not embedded in a CHANGES comment, then you risk the html file no longer
+  working properly with the Matlab functions provided.  Thank you.
+
+  NOTE: DO NOT CHANGE ANYTHING IN <script> TAGS UNLESS YOU ARE ABSOLUTELY SURE OF WHAT YOU ARE DOING!
+
+  Other Note: DO NOT delete the CHANGES comments.  Doing so WILL result in Matlab functions not working properly.
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<!-- land and jump scripts obtained from www.echoecho.com/tooldropdown. -->
+<script>
+<!--
+function land(ref, target)
+{
+loc=ref;
+lowtarget=target.toLowerCase();
+if (lowtarget=="_self") {window.location=loc;}
+else {if (lowtarget=="_top") {top.location=loc;}
+else {if (lowtarget=="_blank") {window.open(loc);}
+else {if (lowtarget=="_parent") {parent.location=loc;}
+else {parent.frames[target].location=loc;};
+}}}
+}
+function jump(menu)
+{
+ref=menu.choice.options[menu.choice.selectedIndex].value;
+splitc=ref.lastIndexOf("*");
+target="";
+if (splitc!=-1)
+{loc=ref.substring(0,splitc);
+target=ref.substring(splitc+1,1000);}
+else {loc=ref; target="_self";};
+if (ref != "") {land(loc,target);}
+}
+function goToURL(c)
+{
+  loc = "";
+  if (c == "0") {
+    // CHANGES: Set loc equal to the relative path of your homepage. It is currently set to "./" to
+    // make the Home button redirect to the index.html file in the current directory (if none exists, file browser).
+    // Note: DO NOT DELETE THE "Home" comment below. If you do, Matlab functions will not work properly.
+    loc = "./" // Home
+    // END CHANGES
+  } else if (c == "1") {
+    // CHANGES: Set loc equal to the relative path of the previous year (if applicable)
+    // Make sure to include "./" if the html file is in the same directory
+	  loc = "";
+    // END CHANGES
+  } else if (c == "2") {
+    // CHANGES: Set loc equal to the relative path of the next year (if applicable)
+    loc = "";
+    // END CHANGES
+  }
+  target="_self";
+  if (loc != "") {
+    land(loc,target);
+  }
+}
+//-->
+</script>
+<script type="text/JavaScript">
+function showOrHide(objid, btnid)
+{
+  if (document.getElementById(objid).style.display == 'none') {
+    document.getElementById(objid).style.display = 'block';
+    document.getElementById(btnid).value = document.getElementById(btnid).value.replace("Show","Hide");
+  } else {
+    document.getElementById(objid).style.display = 'none';
+    document.getElementById(btnid).value = document.getElementById(btnid).value.replace("Hide","Show");
+  }
+}
+</script>
+
+<meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+<!-- CHANGES: You may change this title. This changes the title of the tab in the browser. -->
+<title>**Tab Title**</title>
+<!-- END CHANGES -->
+  <style type="text/css">
+    <!--
+    /* CHANGES: You may change the background-color property for either primarybg or secondarybg */
+    .primarybg {background-color: #FFDC99;}
+    .secondarybg {background-color: #FF7777;}
+    /* END CHANGES */
+    .style3 {
+    	font-size: 16px;
+    	font-weight: bold;
+    }
+    .style4 {font-size: 18px}
+    .style5 {color: #008000}
+    .style6 {font-size: 14px; }
+    .style7 {color: #000000}
+    .style8 {color: #FF0000}
+    -->
+  </style>
+</head>
+<body class="primarybg">
+<table width = "1200" border="0" align="center">
+  <tr>
+    <td width = "200" align="right">
+      <!-- CHANGES: You may delete this line if there is no previous year -->
+      <input type="button" value="Previous Season" onclick="goToURL(1)">
+      <!-- END CHANGES -->
+    </td>
+    <!-- CHANGES: You may change the **Title**. Leave the "Storm_Summary" keywords. If these are deleted
+                  Matlab functions will not work properly. -->
+    <td width = "800" align="center" class="style3 style4">Storm Summary **Title**</td>
+    <!-- END CHANGES -->
+    <td width = "200" align="left">
+      <!-- CHANGES: You may delete this line if there is no next year -->
+      <input type="button" value="Next Season" onclick="goToURL(2)">
+      <!-- END CHANGES -->
+    </td>
+  </tr>
+</table>
+<!-- CHANGES: You may change **Location of Surface Obs** -->
+<p align="center" class="style3 style6">**Location of Surface Obs**</p>
+<!-- END CHANGES -->
+ 
+<table border="0" align="center">
+  <tr>
+    <td><div align="left"><strong></strong></div></td>
+    <td><div align="left"><strong></strong></div></td>
+</tr>
+<tr height="300">
+    <td>
+    <p><input type="button" value="Home" style="font-weight: bold" onclick="goToURL(0)">
+    <form action="dummy" method="post">
+      <select name="choice" size="1">
+        <option value="">Choose a season to view...</option>
+        <!-- CHANGES: For each year (webpage) you have for the MRR location, make a corresponding link in the drop down menu.
+        (e.g. <option value="./city_year.html">Season ...</option>) Do not forget to include the "./"
+        This will make the option show in the drop down menu of seasons to view. The value corresponds to the link of the
+        season's html file. You must insert all option tags before the end select tag below. 
+        ** Make sure to fill in your options below the END CHANGES comment ** -->
+        <!-- END CHANGES -->
+      </select>
+      <input TYPE="button" VALUE="Go" onClick="jump(this.form)">
+    </form>
+    <p><b>Highlighted rows:</b></p>
+    <ul>
+      <li><b>Blue</b> = Snow, Freezing Rain, Sleet, or Mixed</li>
+      <li><b>Grey</b> = Virga, Mix of Virga and Rain; No Icy Precipitation</li>
+      <li><b>White</b> = Rain only</li>
+    </ul>
+    <table border="0">
+  <tr>
+    <td colspan="4"><b>* = general trend 6 hours before storm</b></td>
+  </tr>
+  <tr>
+    <td><b>Tall</b></td>
+    <td><b>(> 4.0 km AGL)</b></td>
+    <td>&nbsp;</td>
+    <td><b>Continuity for Storm Maturity</b></td>
+  </tr>
+  <tr>
+    <td><b>Borderline</b></td>
+    <td><b>( 2.5-4.0 km AGL)</b></td>
+    <td>&nbsp;</td>
+    <td><b>Scattered:  Several Breaks</b></td>
+  </tr>
+  <tr>
+    <td><b>Shallow</b></td>
+    <td><b>(< 2.5 km AGL)</b></td>
+    <td>&nbsp;</td>
+    <td></td>
+  </tr>
+    </table></td>
+    <!-- CHANGES: Replace **href** with the name of an image of where your MRR is. The image must be saved in the current directory. -->
+     <td><a href="**href**"><img src="**href**" width=325  height=325></a></TD>
+    <!-- END CHANGES -->
+     <td><table width="200" border="0" cellspacing="0" bgcolor="white" align="center">
+  <tr class="secondarybg"> 
+    <td style="border:1px solid black;" colspan="7" align="center"><strong> Storm Types </strong></td>
+  </tr>
+    <tr>
+      <td colspan="2" class="primarybg" style="border:0px" align="center">
+      <form action="dummy" method="post">
+    	  <select name="choice" size="1">
+        <option value="">Choose a type...</option>
+        </select>
+        <input TYPE="button" VALUE="Go" onClick="jump(this.form)">
+      </form>
+      <br>
+      </td>
+    </tr>
+  <tr class="primarybg"> 
+    <td style="border:0" colspan="7" align="center"></td>
+  </tr>
+<tr class="secondarybg">
+    <td style="border:1px solid black;" colspan="7" align="center"><strong> Storm Continuity </strong></td>
+  </tr>
+    <tr>
+      <td colspan="2" class="primarybg" style="border:0px" align="center">
+        <!-- CHANGES: In order to make the following buttons redirect to the correct page, you must make a change here.
+                      In the call to the land function, change the 'webpage' part to the name of your updated html file. -->
+        <input type="button" value="Continuous" onclick="land('categories/webpage_Continuous.html','_self')">
+        <input type="button" value="Scattered" onclick="land('categories/webpage_Scattered.html','_self')">
+        <!-- END CHANGES -->
+        <br><br>
+        <input type="button" id="StatsBtn" value="Show Statistics" onclick="showOrHide('StatsHidden','StatsBtn')">
+      </td>
+    </tr>
+</td>
+</table>  
+     <td><table id="StatsHidden" style="display:none" border="0" cellspacing="0" bgcolor="white" align="center">
+  <tr class="primarybg"> 
+    <td style="border:0" colspan="7" align="center"></td>
+  </tr>
+    <tr>
+      <td class="secondarybg" style="border:1px solid black;" width="130" align="center"><strong> Average </strong></td>
+      <td style="border:1px solid black;"><div align="center"><strong>All</strong></div></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid black;"><div align="center"><strong>Temp. (&deg;C)</strong></div></td>
+	    <td style="border:1px solid black;"><div align="center">--</div></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid black;"><div align="center"><strong>RH (&#37;)</strong></div></td>
+			<td style="border:1px solid black;"><div align="center">--</div></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid black;"><div align="center"><strong>Wind Direction</strong></div></td>
+			<td style="border:1px solid black;"><div align="center">--</div></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid black;"><div align="center"><strong>Wind Speed (m/s)</strong></div></td>
+			<td style="border:1px solid black;"><div align="center">--</div></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid black;"><div align="center"><strong>Pressure (hPa)</strong></div></td>
+			<td style="border:1px solid black;"><div align="center">--</div></td>
+    </tr>
+    <tr>
+      <td style="border:1px solid black;"><div align="center"><strong>Precipitation (in)</strong></div></td>
+			<td style="border:1px solid black;"><div align="center">--</div></td>
+    </tr>
+  <tr class="primarybg"> 
+    <td style="border:0" colspan="7" align="center"></td>
+  </tr>
+<tr class="secondarybg">
+    <td style="border:1px solid black;" colspan="7" align="center"><strong> Total Precipitation (in.) </strong></td>
+  </tr>
+    <tr>
+			<td style="border:1px solid black;" colspan="7" align="center"><strong> -- </strong></td>
+    </tr>
+  <tr class="primarybg"> 
+    <td style="border:0" colspan="7" align="center"></td>
+  </tr>
+<tr class="secondarybg">
+    <td style="border:1px solid black;" colspan="7" align="center"><strong> Avg. Duration (hrs) </strong></td>
+  </tr>
+    <tr>
+			<td style="border:1px solid black;" colspan="7" align="center"><strong> -- </strong></td>
+    </tr>
+</td>
+</table>  
+</TR>
+</table>
+ 
+<table border="0" cellspacing="0" bgcolor="white" align="center">
+  <tbody>
+    <tr>
+      <td colspan="9" rowspan="2" class="primarybg"></td>
+      <td colspan="2" class="primarybg"></td>
+	  <td colspan="2" rowspan="2" class="primarybg"></td>
+	  <td colspan="6" style="border:1px solid black;"><div align="center"><strong>Trends</strong></div></td>
+    </tr>
+	<tr>
+      <td colspan="2" style="border:1px solid black;"><div align="center"><strong>Wind Direction </strong></div></td>
+	  <td colspan="2" style="border:1px solid black;"><div align="center"><strong>Temperature</strong></div></td>
+      <td colspan="2" style="border:1px solid black;"><div align="center"><strong>RH</strong></div></td>
+      <td colspan="2" style="border:1px solid black;"><div align="center"><strong>Pressure</strong></div></td>
+    </tr>
+    <tr>
+      <td width="32" style="border:1px solid black;"><div align="center"><strong>Year</strong></div></td>
+      <td width="45" style="border:1px solid black;"><div align="center"><strong>Month</strong></div></td>
+      <td width="28" style="border:1px solid black;"><div align="center"><strong>Day</strong></div></td>
+      <td width="100" style="border:1px solid black;"><div align="center"><strong>Type</strong></div></td>
+      <td style="border:1px solid black;"><div align="center"><strong>AGL</strong></div></td>
+      <td width="60" style="border:1px solid black;"><div align="center"><strong>Continuity</strong></div></td>
+      <td width="48" style="border:1px solid black;"><div align="center"><strong>Start Time (UTC)</strong></div></td>
+      <td width="63" style="border:1px solid black;"><div align="center"><strong>Duration (hrs)</strong></div></td>
+      <td width="48" style="border:1px solid black;"><div align="center"><strong>Avg. Temp. (&deg;C)</strong></div></td>
+      <td width="43" style="border:1px solid black;"><div align="center"><strong>Avg.</strong></div></td>
+      <td width="64" style="border:1px solid black;"><div align="center"><strong>At Storm Maturity</strong></div></td>
+      <td width="45" style="border:1px solid black;"><div align="center"><strong>Wind Speed (m/s)</strong></div></td>
+      <td width="62" style="border:1px solid black;"><div align="center"><strong>Precip. (in)</strong></div></td>
+      <td width="64" style="border:1px solid black;"><div align="center"><strong>before*</strong></div></td>
+      <td width="64" style="border:1px solid black;"><div align="center"><strong>during</strong></div></td>
+      <td width="64" style="border:1px solid black;"><div align="center"><strong>before*</strong></div></td>
+      <td width="64" style="border:1px solid black;"><div align="center"><strong>during</strong></div></td>
+      <td width="64" style="border:1px solid black;"><div align="center"><strong>before*</strong></div></td>
+      <td width="64" style="border:1px solid black;"><div align="center"><strong>during</strong></div></td>
+    </tr>
+    <!-- Table entries end -->
+</table>
+<p>
+</p>
+
+<!-- CHANGES: You may change the web page credits to match your name. Fill in the place holder for department information
+(e.g. Department of Marine, Earth, and Atmospheric Sciences, NCSU). Also, fill in the place holder for material disclaimer
+and funding information. If you do not wish to use a place holder, delete the line. If you decide to make any updates to 
+this template file outside of the CHANGES tags, you are encouraged to update the Verison # and date and save the old version
+just in case. -->
+<p align="center"><strong>Version 1, 16 September 2013</strong></p>
+<p align="center"><strong>web page credits: **YOUR NAME**</strong></p>
+<p align="center"><strong>**Department information here**</strong></p>
+<p align="center"><strong>**Disclaimer and funding information here**</strong></p>
+<!-- END CHANGES -->
+
+<!-- CHANGES: You may supply an email address link as contact information for viewers. Replace **Name of Contact** with the
+contact name and both occurences of **youremail** with the full email address of the contact. If you do not wish to supply
+any contact information, simply delete lines 300 through 302. -->
+<p align="center"><strong>contacts: 
+<br> **Name of Contact** <a href="mailto:**youremail**">**youremail**</a><br>
+</strong></p>
+<!-- END CHANGES -->
+<p>&nbsp;</p>
+</body>
+</html>
+
