@@ -17,12 +17,16 @@ function varargout = Step_One_Figure(varargin)
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
-%
+%       ***FUNCTION DISCRIPTION****
+% INPUTS:  NONE
+% 
+% OUTPUTS: MRR, output of caller function (see instructions PDF). 
+% Note: output handled by MET_Package
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help Step_One_Figure
 
-% Last Modified by GUIDE v2.5 07-Jan-2016 14:26:33
+% Last Modified by GUIDE v2.5 08-Jan-2016 12:39:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -74,18 +78,19 @@ varargout{1} = handles.output;
 
 
 
-function edit1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
+
+function directoryEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to directoryEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit1 as text
-%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+% Hints: get(hObject,'String') returns contents of directoryEdit as text
+%        str2double(get(hObject,'String')) returns contents of directoryEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
+function directoryEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to directoryEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -97,18 +102,18 @@ end
 
 
 
-function edit2_Callback(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
+function prefixEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to prefixEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit2 as text
-%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+% Hints: get(hObject,'String') returns contents of prefixEdit as text
+%        str2double(get(hObject,'String')) returns contents of prefixEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
+function prefixEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to prefixEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -120,18 +125,18 @@ end
 
 
 
-function edit3_Callback(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
+function enddateEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to enddateEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit3 as text
-%        str2double(get(hObject,'String')) returns contents of edit3 as a double
+% Hints: get(hObject,'String') returns contents of enddateEdit as text
+%        str2double(get(hObject,'String')) returns contents of enddateEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
+function enddateEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to enddateEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -143,18 +148,18 @@ end
 
 
 
-function edit4_Callback(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
+function startdateEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to startdateEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit4 as text
-%        str2double(get(hObject,'String')) returns contents of edit4 as a double
+% Hints: get(hObject,'String') returns contents of startdateEdit as text
+%        str2double(get(hObject,'String')) returns contents of startdateEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit4_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
+function startdateEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to startdateEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -166,18 +171,18 @@ end
 
 
 
-function edit5_Callback(hObject, eventdata, handles)
-% hObject    handle to edit5 (see GCBO)
+function suffixEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to suffixEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit5 as text
-%        str2double(get(hObject,'String')) returns contents of edit5 as a double
+% Hints: get(hObject,'String') returns contents of suffixEdit as text
+%        str2double(get(hObject,'String')) returns contents of suffixEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit5_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit5 (see GCBO)
+function suffixEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to suffixEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -189,18 +194,18 @@ end
 
 
 
-function edit6_Callback(hObject, eventdata, handles)
-% hObject    handle to edit6 (see GCBO)
+function numrowsEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to numrowsEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit6 as text
-%        str2double(get(hObject,'String')) returns contents of edit6 as a double
+% Hints: get(hObject,'String') returns contents of numrowsEdit as text
+%        str2double(get(hObject,'String')) returns contents of numrowsEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit6_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit6 (see GCBO)
+function numrowsEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to numrowsEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -216,10 +221,22 @@ function browseButton_Callback(hObject, eventdata, handles)
 % hObject    handle to browseButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+filePath = uigetdir();
+set(findobj('Tag','directoryEdit'), 'String', filePath);
 
 % --- Executes on button press in goButton.
 function goButton_Callback(hObject, eventdata, handles)
+global guiStruct
 % hObject    handle to goButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+guiStruct.directory = get(findobj('Tag','directoryEdit'),'String');
+guiStruct.prefix = get(findobj('Tag','prefixEdit'), 'String');
+guiStruct.suffix= get(findobj('Tag','suffixEdit'), 'String');
+guiStruct.datestart = get(findobj('Tag','startdateEdit'),'String');
+guiStruct.dateend = get(findobj('Tag','enddateEdit'), 'String');
+guiStruct.records_per_file = str2double(get(findobj('Tag','numrowsEdit'),'String'));
+guiStruct.ukoln_toggle = get(findobj('Tag','ukoln_toggle'),'Value');
+dummer = 'dummer';
+
+close(); 
