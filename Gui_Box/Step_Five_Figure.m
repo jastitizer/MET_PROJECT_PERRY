@@ -22,7 +22,7 @@ function varargout = Step_Five_Figure(varargin)
 
 % Edit the above text to modify the response to help Step_Five_Figure
 
-% Last Modified by GUIDE v2.5 09-Jan-2016 03:12:54
+% Last Modified by GUIDE v2.5 09-Jan-2016 10:45:41
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -74,18 +74,18 @@ varargout{1} = handles.output;
 
 
 
-function edit1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
+function frontpgEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to frontpgEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit1 as text
-%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+% Hints: get(hObject,'String') returns contents of frontpgEdit as text
+%        str2double(get(hObject,'String')) returns contents of frontpgEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
+function frontpgEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to frontpgEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -101,21 +101,23 @@ function frontpgBrowseButton_Callback(hObject, eventdata, handles)
 % hObject    handle to frontpgBrowseButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+[fileName,filePath,~] = uigetfile('.html');
+set(findobj('Tag','frontpgEdit'),'String',fileName);
 
 
 
-function edit2_Callback(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
+function templateEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to templateEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit2 as text
-%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+% Hints: get(hObject,'String') returns contents of templateEdit as text
+%        str2double(get(hObject,'String')) returns contents of templateEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
+function templateEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to templateEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -126,12 +128,13 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pushbutton2.
-function pushbutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2 (see GCBO)
+% --- Executes on button press in templateBrowseButton.
+function templateBrowseButton_Callback(hObject, eventdata, handles)
+% hObject    handle to templateBrowseButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+[fileName,filePath,~] = uigetfile('.html');
+set(findobj('Tag','templateEdit'),'String',fileName);
 
 
 function edit3_Callback(hObject, eventdata, handles)
@@ -156,8 +159,12 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pushbutton3.
-function pushbutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3 (see GCBO)
+% --- Executes on button press in goButton.
+function goButton_Callback(hObject, eventdata, handles)
+% hObject    handle to goButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global guiStruct
+guiStruct.frontpg_filename = get(findobj('Tag','frontpgEdit'),'String');
+guiStruct.template_filename = get(findobj('Tag','templateEdit'),'String');
+close();

@@ -6,6 +6,7 @@ function [  ] = MET_Package()
 % Step_Three_Figure follows step three from the manual, setting z-threshold
 % parameters. Note: rows_per_day is set automatically. 
 global guiStruct;
+persistent settings
 guiStruct = struct();
 %Run figure to get parameters for caller
 F = Step_One_Figure();
@@ -45,12 +46,15 @@ savefilepath = guiStruct.savefilepath;
 metartype = guiStruct.metartype;
 minuteinterval = guiStruct.minuteinterval;
 gen_metar2struct(metarfilepath, savefilepath, 0,minuteinterval); 
-end
 %*****************end step four************
 
-%get parameters for  MRR_Add_Storms
-- frontpage_orig: File name of the frontpage html file to which you are addistorms (e.g. ‘frontpage.html’). 
-- frontpage_saveas: File name of the frontpage html file after the new storbeen added.  This should be not the same as frontpage_orig, so you can sthe old html file the way it was as a backup (e.g. ‘myfrontpage.html’). 
-- metarfile_mat: File name of the Matlab struct of surface observations.  Incthe .mat extension. 
-- empty_stormpage: File name of the template stormpage.html file.
- MRR_Add_Storms(MRR_filtered, dates, settings) 
+%get parameters for  MRR_Add_Storms and calculate_avg, Steps Five and Six
+settings.frontpage_orig  = guiStruct.frontpg_filename;
+settings.metarfile_mat = guiStruct.matFilePath;
+settings.empty_stormpage = guiStruct.template_filename;
+[fileName,filePath , ~] = uigetfile('.mat', 'Save As');
+settings.frontpage_saveas = fileName;
+MRR_Add_Storms(MRR_filtered, dates, settings);
+calculate_avgs(settings.frontpage_savas,0,length(dates),0);
+
+
