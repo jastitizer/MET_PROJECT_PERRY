@@ -22,7 +22,7 @@ function varargout = Step_Four_Figure(varargin)
 
 % Edit the above text to modify the response to help Step_Four_Figure
 
-% Last Modified by GUIDE v2.5 08-Jan-2016 16:00:11
+% Last Modified by GUIDE v2.5 09-Jan-2016 02:31:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -74,18 +74,18 @@ varargout{1} = handles.output;
 
 
 
-function edit1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
+function openPathEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to openPathEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit1 as text
-%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+% Hints: get(hObject,'String') returns contents of openPathEdit as text
+%        str2double(get(hObject,'String')) returns contents of openPathEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
+function openPathEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to openPathEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -102,20 +102,22 @@ function openPathButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+  [fileName,filePath , ~] = uigetfile('.mat', 'Choose Surface Data Txt File');
+set(findobj('Tag','openPathEdit'), 'String', [filePath,fileName]);
 
 
-function edit3_Callback(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
+function savePathEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to savePathEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit3 as text
-%        str2double(get(hObject,'String')) returns contents of edit3 as a double
+% Hints: get(hObject,'String') returns contents of savePathEdit as text
+%        str2double(get(hObject,'String')) returns contents of savePathEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
+function savePathEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to savePathEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -131,15 +133,22 @@ function savePathButton_Callback(hObject, eventdata, handles)
 % hObject    handle to savePathButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+global guiStruct
+  [fileName,filePath , ~] = uigetfile('.mat', 'Save As');
+set(findobj('Tag','openPathEdit'), 'String', [filePath,fileName]);
+guiStruct.matFilePath = fileName;
 
 % --- Executes on button press in goButton.
 function goButton_Callback(hObject, eventdata, handles)
 % hObject    handle to goButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-
+global guiStruct
+guiStruct.metarfilepath = get(findobj('Tag','savePathEdit'),'String');
+guiStruct.savefilepath = get(findobj('Tag','openPathEdit'),'String');
+guiStruct.metartype = get(findobj('Tag','metartypeEdit'),'String');
+guiStruct.minuteinterval = get(findobj('Tag','intervalEdit'),'String');
+close
 
 function metartypeEdit_Callback(hObject, eventdata, handles)
 % hObject    handle to metartypeEdit (see GCBO)

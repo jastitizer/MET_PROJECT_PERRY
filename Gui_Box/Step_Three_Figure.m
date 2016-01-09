@@ -125,6 +125,6 @@ function goButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global guiStruct
-
 guiStruct.Z_threshhold = get(findobj('Tag','edgeEdit'),'String');
 guiStruct.Z_threshhold_2 = get(findobj('Tag','reflectivityEdit'),'String');
+close
