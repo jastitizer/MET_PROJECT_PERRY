@@ -61,8 +61,7 @@ calculate_avgs(settings.frontpage_savas,0,length(dates),0);
 %So, we actually have all the data for this step, we can just run with it. 
 htmlfile = guiStruct.frontpg_filename;
 homelocation = guiStruct.home_filepath;
-stormsummarypg = guiStruct.fronpg_filePath;
-add_next_prev(htmlfile,homelocation , stormsummarypg, '');
+stormsummarypg = guiStruct.fronpg_filePath
 % - htmlfile: File name of your frontpage html file.
 % - homelocation: Relative path you want to set for the “Home” button in each storm.  
 % I always make the “Home” button go back to the index of the directory the front
