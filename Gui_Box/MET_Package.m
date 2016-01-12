@@ -44,15 +44,17 @@ waitfor(F);
 metarfilepath = guiStruct.metarfilepath;
 savefilepath = guiStruct.savefilepath;
 metartype = guiStruct.metartype;
-minuteinterval = guiStruct.minuteinterval;
-gen_metar2struct(metarfilepath, savefilepath, 0,minuteinterval); 
+%minuteinterval = guiStruct.minuteinterval;
+gen_metar2struct(metarfilepath, savefilepath); 
 %*****************end step four************
 
 %get parameters for  MRR_Add_Storms and calculate_avg, Steps Five and Six
+F = Step_Five_Figure();
+waitfor(F);
 settings.frontpage_orig  = guiStruct.frontpg_filename;
 settings.metarfile_mat = guiStruct.matFilePath;
 settings.empty_stormpage = guiStruct.template_filename;
-[fileName,filePath , ~] = uigetfile('.mat', 'Save As');
+[fileName,filePath , ~] = uiputfile('.mat', 'Save As');
 settings.frontpage_saveas = fileName;
 MRR_Add_Storms(MRR_filtered, dates, settings);
 calculate_avgs(settings.frontpage_savas,0,length(dates),0);

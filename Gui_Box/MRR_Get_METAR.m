@@ -149,19 +149,19 @@ foundgap = 0;           % Tracks if a gap was found at the beginning of a storm
 stormid = 1;            % Tracks which storm to examine in date_range
 
 %%% Variables to keep track of:
-pressure = nan(1, (24 * graphdur(stormid)) + 1);
-temperature = nan(1, (24 * graphdur(stormid)) + 1);
-relhumidity = nan(1, (24 * graphdur(stormid)) + 1);
-windspd = nan(1, (24 * graphdur(stormid)) + 1);
-windspdWildcat = nan(1, (24 * graphdur(stormid)) + 1);
-gustsWildcat = nan(1, (24 * graphdur(stormid)) + 1);
+pressure = zeros(1, (24 * graphdur(stormid)) + 1);
+temperature = zeros(1, (24 * graphdur(stormid)) + 1);
+relhumidity = zeros(1, (24 * graphdur(stormid)) + 1);
+windspd = zeros(1, (24 * graphdur(stormid)) + 1);
+windspdWildcat = zeros(1, (24 * graphdur(stormid)) + 1);
+gustsWildcat = zeros(1, (24 * graphdur(stormid)) + 1);
 gusts = struct([]);
-winddir = nan(1, (24 * graphdur(stormid)) + 1);
+winddir = zeros(1, (24 * graphdur(stormid)) + 1);
 totalprecip = 0; had_trace = 0;
-precip = nan(1, (24 * graphdur(stormid)) + 1);
+precip = zeros(1, (24 * graphdur(stormid)) + 1);
 
 fprintf('Parsing Matlab struct of METAR data\n')
-fprintf('and generating graphs of statistics...')
+fprintf('and generating graphs of statistics...\n')
 % Parse the metar data and look for storms specified by the date_range.
 % When parsing, first the start of the graph of a storm is found. Then the
 % start of the storm is found. After the storm has ended, the graph may
@@ -205,38 +205,24 @@ while stormid <= length(date_range)
                               % not execute more than once during a graph.
         
         if graphcounter < (24 * graphdur(stormid) + 1)
-            
-            if isfield(metarStruct, 'pres') && ~isfield(settings, 'is_alta')
+%             if ~isfield(settings, 'is_alta')
                 pressure(graphcounter + 1) = metarStruct(counter).pres;
-            end
-            if isfield(metarStruct, 'temp')
-                temperature(graphcounter + 1) = metarStruct(counter).temp;
-            end
-            if isfield(metarStruct, 'relhum')
-                relhumidity(graphcounter + 1) = metarStruct(counter).relhum;
-            end
-            if isfield(metarStruct, 'wspd')
-                windspd(graphcounter + 1) = metarStruct(counter).wspd;
-            end
-            if isfield(settings, 'is_alta') && isfield(metarStruct, 'wildcatWspd') ...
-                                            && isfield(metarStruct, 'wildcatGust')
+%             end
+            temperature(graphcounter + 1) = metarStruct(counter).temp;
+            relhumidity(graphcounter + 1) = metarStruct(counter).relhum;
+            windspd(graphcounter + 1) = metarStruct(counter).wspd;
+            if isfield(settings, 'is_alta')
                 windspdWildcat(graphcounter + 1) = metarStruct(counter).wildcatWspd;
                 gustsWildcat(graphcounter + 1) = metarStruct(counter).wildcatGust;
             end
-            if isfield(metarStruct, 'gust')
-                gusts(graphcounter + 1).value = metarStruct(counter).gust;
-                gusts(graphcounter + 1).date = serialdate;
-            else
-                gusts(graphcounter + 1).value = NaN;
-                gusts(graphcounter + 1).date = serialdate;
-            end
-            if isfield(metarStruct, 'wdir') && ...
-                    metarStruct(counter).wdir == 990 % Variable winds
+%             gusts(graphcounter + 1).value = metarStruct(counter).gust;
+            gusts(graphcounter + 1).date = serialdate;
+            if isnan(metarStruct(counter).wdir) % Variable winds
                 winddir(graphcounter + 1) = NaN;
-            elseif isfield(metarStruct, 'wdir')
+            else
                 winddir(graphcounter + 1) = metarStruct(counter).wdir;
             end
-            if metarStruct(counter).precip1 == 0 % No precipitation
+            if isnan(metarStruct(counter).precip1) % No precipitation
                 precip(graphcounter + 1) = NaN;
             elseif metarStruct(counter).precip1 == -1 % Trace amount
                 precip(graphcounter + 1) = 0;
@@ -250,28 +236,28 @@ while stormid <= length(date_range)
             clear beginningprecip
         else
             % Update the total precipitation count for the final time.
-            if stormcounter > 24 && metarStruct(counter).precip24 > 0
-                totalprecip = totalprecip + metarStruct(counter).precip24;
-
-                % Subtract the 6 hour precip counts that were added to the
-                % totalprecip count in the 24 hour window.
-                for j = (counter - 23):counter
-                    if metarStruct(j).precip6 > 0
-                        totalprecip = totalprecip - metarStruct(j).precip6;
-                    end
-                end
-            end
-            if stormcounter > 6 && metarStruct(counter).precip6 > 0
-                totalprecip = totalprecip + metarStruct(counter).precip6;
-
-                % Subtract the 1 hour precip counts that were added to the
-                % totalprecip count in the 6 hour window.
-                for j = (counter - 5):counter
-                    if metarStruct(j).precip1 > 0
-                        totalprecip = totalprecip - metarStruct(j).precip1;
-                    end
-                end
-            end
+%             if stormcounter > 24 && metarStruct(counter).precip24 > 0
+%                 totalprecip = totalprecip + metarStruct(counter).precip24;
+% 
+%                 % Subtract the 6 hour precip counts that were added to the
+%                 % totalprecip count in the 24 hour window.
+%                 for j = (counter - 23):counter
+%                     if metarStruct(j).precip6 > 0
+%                         totalprecip = totalprecip - metarStruct(j).precip6;
+%                     end
+%                 end
+%             end
+%             if stormcounter > 6 && metarStruct(counter).precip6 > 0
+%                 totalprecip = totalprecip + metarStruct(counter).precip6;
+% 
+%                 % Subtract the 1 hour precip counts that were added to the
+%                 % totalprecip count in the 6 hour window.
+%                 for j = (counter - 5):counter
+%                     if metarStruct(j).precip1 > 0
+%                         totalprecip = totalprecip - metarStruct(j).precip1;
+%                     end
+%                 end
+%             end
             if metarStruct(counter).precip1 > 0
                 totalprecip = totalprecip + metarStruct(counter).precip1;
 
@@ -297,12 +283,12 @@ while stormid <= length(date_range)
         stormstart = floor(24 * (stormstart - graphstart(stormid)) + 1);
         stormend = floor(24 * (stormend - graphstart(stormid)) + 1);
         
-        % Used to obtain the wind direction at storm maturity.
+%         % Used to obtain the wind direction at storm maturity.
         s_winddir = winddir(stormstart:stormend);
-        s_gusts = [gusts(stormstart:stormend).value];
+%         s_gusts = [gusts(stormstart:stormend).value];
         s_windspd = windspd(stormstart:stormend);
-        s_gusts_wildcat = gustsWildcat(stormstart:stormend);
-        s_windspd_wildcat = windspdWildcat(stormstart:stormend);
+%         s_gusts_wildcat = gustsWildcat(stormstart:stormend);
+%         s_windspd_wildcat = windspdWildcat(stormstart:stormend);
         
         %%% Values for the table:
         stormData(stormid).year = datestr(date_range(stormid).start, 'yyyy');
@@ -317,9 +303,9 @@ while stormid <= length(date_range)
         stormData(stormid).continuity = []; % Not implemented.
         stormData(stormid).avg_temp = nanmean(temperature(stormstart:stormend));
         stormData(stormid).avg_winddir = gen_calculate_avgwdir(s_winddir);
-        if ~isnan(max(s_gusts))
-            stormData(stormid).peak_winddir = winddir(stormstart + find(s_gusts == max(s_gusts),1) - 1);
-        elseif ~isnan(max(s_windspd)) && max(s_windspd) ~= 0
+%         if ~isnan(max(s_gusts))
+%             stormData(stormid).peak_winddir = winddir(stormstart + find(s_gusts == max(s_gusts),1) - 1);
+        if ~isnan(max(s_windspd)) && max(s_windspd) ~= 0
             stormData(stormid).peak_winddir = winddir(stormstart + find(s_windspd == max(s_windspd),1) - 1);
         else
             stormData(stormid).peak_winddir = []; % No wind, therefore no peak winddir.
@@ -343,21 +329,21 @@ while stormid <= length(date_range)
         stormPage(stormid).avgwsp = nanmean(s_windspd);
         stormPage(stormid).maxtemp = max(temperature(stormstart:stormend));
         stormPage(stormid).maxpres = max(pressure(stormstart:stormend));
-        if ~isnan(max(s_gusts))
-            stormPage(stormid).maxwsp = max(s_gusts);
-        else
+%         if ~isnan(max(s_gusts))
+%             stormPage(stormid).maxwsp = max(s_gusts);
+%         else
             stormPage(stormid).maxwsp = max(s_windspd);
-        end
+%         end
         stormPage(stormid).maxrh = max(relhumidity(stormstart:stormend));
         stormPage(stormid).mintemp = min(temperature(stormstart:stormend));
         stormPage(stormid).minpres = min(pressure(stormstart:stormend));
         stormPage(stormid).minwsp = min(s_windspd);
         stormPage(stormid).minrh = min(relhumidity(stormstart:stormend));
-        if isfield(settings, 'is_alta')
-            stormPage(stormid).maxwspWildcat = max(s_gusts_wildcat);
-            stormPage(stormid).avgwspWildcat = nanmean(s_windspd_wildcat);
-            stormPage(stormid).minwspWildcat = min(s_windspd_wildcat);
-        end
+%         if isfield(settings, 'is_alta')
+%             stormPage(stormid).maxwspWildcat = max(s_gusts_wildcat);
+%             stormPage(stormid).avgwspWildcat = nanmean(s_windspd_wildcat);
+%             stormPage(stormid).minwspWildcat = min(s_windspd_wildcat);
+%         end
         stormPage(stormid).othergraphs_title = stormData(stormid).othergraphs_title;
         % Set the strings for the images in the stormpage html file.
         graphstring = datestr(date_range(stormid).start, 'yyyymmdd_HHMM');
@@ -423,8 +409,8 @@ while stormid <= length(date_range)
         xticks = graphstart(stormid):xscale:graphend(stormid);
         xvalues = graphstart(stormid):(1/24):graphend(stormid);
         
-      if ~isfield(settings, 'is_alta') && (~isfield(settings, 'choose_graphs') || ...
-              (isfield(settings, 'choose_graphs') && isfield(settings, 'graph_pres')))
+%       if ~isfield(settings, 'is_alta') && (~isfield(settings, 'choose_graphs') || ...
+%               (isfield(settings, 'choose_graphs') && isfield(settings, 'graph_pres')))
       %%% Pressure graph %%%:
         if max(pressure) - min(pressure) <= 7
             yscale = 1; % 1 hPa intervals on y-axis
@@ -446,84 +432,92 @@ while stormid <= length(date_range)
         set(gca, 'YTick', yticks)
         datetick('x', 'HH', 'keeplimits', 'keepticks')
         hold on
-        ph = scatter(xvalues, pressure);
-        set(gca, 'YGrid', 'on'), box on
-        set(ph, 'SizeData', 150)
-        set(ph, 'Marker', '.')
-        % Graph a second scatter plot of pressure values only in the storm
-        % domain. Make the points green to indicate the storm domain.
-        ph(2) = scatter(stormstart:(1/24):stormend, ...
-            pressure((1 + round(24*(stormstart - graphstart(stormid)))): ...
-            (1 + round(24*(stormend - graphstart(stormid))))));
-        set(ph(2), 'SizeData', 200)
-        set(ph(2), 'MarkerEdgeColor', [0 .8 .4])
-        set(ph(2), 'Marker', '.')
-        hold off
-        
-        xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
-            'mmm dd, yyyy') ')'], AXES_FONT{:})
-        ylabel('Pressure (hPa)', AXES_FONT{:})
-        title('Pressure', TITLE_FONT{:})
-        set(gcf, 'PaperPositionMode', 'manual')
-        set(gcf, 'PaperUnits', 'inches')
-        set(gcf, 'PaperPosition', [0 0 11 8.5])
-        saveas(gcf, ['storms/' stormPage(stormid).hpa_graph])
-        clf(gcf)
+        if length(xvalues) == length(pressure)
+            ph = scatter(xvalues, pressure);
+            set(gca, 'YGrid', 'on'), box on
+            set(ph, 'SizeData', 150)
+            set(ph, 'Marker', '.')
+            % Graph a second scatter plot of pressure values only in the storm
+            % domain. Make the points green to indicate the storm domain.
+            ph(2) = scatter(stormstart:(1/24):stormend, ...
+                pressure((1 + round(24*(stormstart - graphstart(stormid)))): ...
+                (1 + round(24*(stormend - graphstart(stormid))))));
+            set(ph(2), 'SizeData', 200)
+            set(ph(2), 'MarkerEdgeColor', [0 .8 .4])
+            set(ph(2), 'Marker', '.')
+            hold off
+            
+            xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
+                'mmm dd, yyyy') ')'], AXES_FONT{:})
+            ylabel('Pressure (hPa)', AXES_FONT{:})
+            title('Pressure', TITLE_FONT{:})
+            set(gcf, 'PaperPositionMode', 'manual')
+            set(gcf, 'PaperUnits', 'inches')
+            set(gcf, 'PaperPosition', [0 0 11 8.5])
+            saveas(gcf, ['storms/' stormPage(stormid).hpa_graph])
+            clf(gcf)
+        else
+            fprintf('Error creating presssure graph for storm %d\n',stormid)
+        end
         clear ph yscale ylims yticks
-      end
+%       end
         
       %%% Temperature graph %%%:
       if ~isfield(settings, 'choose_graphs') || ...
               (isfield(settings, 'choose_graphs') && isfield(settings, 'graph_temp'))
-        if max(temperature) - min(temperature) <= 7
-            yscale = 1; % 1 degree C intervals on y-axis
-        elseif max(temperature) - min(temperature) <= 14
-            yscale = 2; % 2 degrees C intervals on y-axis
-        elseif max(temperature) - min(temperature) <= 20
-            yscale = 3; % 3 degrees C intervals on y-axis
-        else
-            yscale = 4; % Max of 4 degrees C intervals on y-axis
-        end
-        ylims = [floor(min(temperature) - 1) ceil(max(temperature) + 1)];
-        yticks = ylims(1):yscale:ylims(2);
-        
-        figure(1), set(gcf, 'visible', 'off')
-        % Graph scatter plot of all temperature values in graph domain.
-        ylim(ylims)
-        xlim([graphstart(stormid) graphend(stormid)])
-        set(gca, 'XTick', xticks)
-        set(gca, 'YTick', yticks)
-        datetick('x', 'HH', 'keeplimits', 'keepticks')
-        hold on
-        th = scatter(xvalues, temperature);        
-        set(gca, 'YGrid', 'on'), box on
-        set(th, 'SizeData', 150, 'Marker', '.')
-        
-        % Graph line plot of all temperature values in graph domain.
-        th(3) = plot(xvalues, temperature);
-        % Graph a second line plot of temperature values only in the storm
-        % domain. Make the line green to indicate the storm domain.
-        th(4) = plot(stormstart:(1/24):stormend, ...
-            temperature((1 + round(24*(stormstart - graphstart(stormid)))): ...
-            (1 + round(24*(stormend - graphstart(stormid))))));
-        set(th(4), 'LineWidth', 2.5, 'Color', [0 .8 .4])
-        % Graph a second scatter plot of temperature values only in the
-        % storm domain. Make the points dark green.
-        th(2) = scatter(stormstart:(1/24):stormend, ...
-            temperature((1 + round(24*(stormstart - graphstart(stormid)))): ...
-            (1 + round(24*(stormend - graphstart(stormid))))));
-        set(th(2), 'SizeData', 200, 'MarkerEdgeColor', [0 .5 0], 'Marker', '.')
-        hold off
-        
-        xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
-            'mmm dd, yyyy') ')'], AXES_FONT{:})
-        ylabel('Temperature ({\circ}C)', AXES_FONT{:})
-        title('Temperature', TITLE_FONT{:})
-        set(gcf, 'PaperPositionMode', 'manual')
-        set(gcf, 'PaperUnits', 'inches')
-        set(gcf, 'PaperPosition', [0 0 11 8.5])
-        saveas(gcf, ['storms/' stormPage(stormid).temp_graph])
-        clf(gcf)
+          if max(temperature) - min(temperature) <= 7
+              yscale = 1; % 1 degree C intervals on y-axis
+          elseif max(temperature) - min(temperature) <= 14
+              yscale = 2; % 2 degrees C intervals on y-axis
+          elseif max(temperature) - min(temperature) <= 20
+              yscale = 3; % 3 degrees C intervals on y-axis
+          else
+              yscale = 4; % Max of 4 degrees C intervals on y-axis
+          end
+          ylims = [floor(min(temperature) - 1) ceil(max(temperature) + 1)];
+          yticks = ylims(1):yscale:ylims(2);
+          
+          figure(1), set(gcf, 'visible', 'off')
+          % Graph scatter plot of all temperature values in graph domain.
+          ylim(ylims)
+          xlim([graphstart(stormid) graphend(stormid)])
+          set(gca, 'XTick', xticks)
+          set(gca, 'YTick', yticks)
+          datetick('x', 'HH', 'keeplimits', 'keepticks')
+          hold on
+          if length(xvalues) == length(temperature)
+              th = scatter(xvalues, temperature);
+              set(gca, 'YGrid', 'on'), box on
+              set(th, 'SizeData', 150, 'Marker', '.')
+              
+              % Graph line plot of all temperature values in graph domain.
+              th(3) = plot(xvalues, temperature);
+              % Graph a second line plot of temperature values only in the storm
+              % domain. Make the line green to indicate the storm domain.
+              th(4) = plot(stormstart:(1/24):stormend, ...
+                  temperature((1 + round(24*(stormstart - graphstart(stormid)))): ...
+                  (1 + round(24*(stormend - graphstart(stormid))))));
+              set(th(4), 'LineWidth', 2.5, 'Color', [0 .8 .4])
+              % Graph a second scatter plot of temperature values only in the
+              % storm domain. Make the points dark green.
+              th(2) = scatter(stormstart:(1/24):stormend, ...
+                  temperature((1 + round(24*(stormstart - graphstart(stormid)))): ...
+                  (1 + round(24*(stormend - graphstart(stormid))))));
+              set(th(2), 'SizeData', 200, 'MarkerEdgeColor', [0 .5 0], 'Marker', '.')
+              hold off
+              
+              xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
+                  'mmm dd, yyyy') ')'], AXES_FONT{:})
+              ylabel('Temperature ({\circ}C)', AXES_FONT{:})
+              title('Temperature', TITLE_FONT{:})
+              set(gcf, 'PaperPositionMode', 'manual')
+              set(gcf, 'PaperUnits', 'inches')
+              set(gcf, 'PaperPosition', [0 0 11 8.5])
+              saveas(gcf, ['storms/' stormPage(stormid).temp_graph])
+              clf(gcf)
+          else
+              fprintf('Error creating temperature graph for storm %d\n',stormid)
+          end
         clear th yscale ylims yticks
       end
         
@@ -540,11 +534,11 @@ while stormid <= length(date_range)
             yscale = 2; % Max of 2 m/s intervals on y-axis
         end
         
-        if isnan(max([gusts.value]))
+%         if isnan(max([gusts.value]))
             ylims = [-1 ceil(max(windspd) + 2)];
-        else
-            ylims = [-1 ceil(max([gusts.value]) + 2)];
-        end
+%         else
+%             ylims = [-1 ceil(max([gusts.value]) + 2)];
+%         end
         yticks = 0:yscale:ylims(2);
         
         figure(1), set(gcf, 'visible', 'off')
@@ -555,41 +549,45 @@ while stormid <= length(date_range)
         set(gca, 'YTick', yticks)
         datetick('x', 'HH', 'keeplimits', 'keepticks')
         hold on
-        wsh = scatter(xvalues, windspd);
-        set(gca, 'YGrid', 'on'), box on
-        set(wsh, 'SizeData', 150, 'Marker', '.')
-        
-        % Find x-values corresponding to the wind gusts
-        xofgusts = [gusts(~isnan([gusts.value])).date];
-        % Graph scatter plot of all wind gusts in graph domain.
-        wsh(5) = scatter(xofgusts, [gusts(~isnan([gusts.value])).value]);
-        clear xofgusts
-        set(wsh(5), 'Marker', '+', 'MarkerEdgeColor', 'r')
-        % Graph line plot of all wind speed values in graph domain.
-        wsh(3) = plot(xvalues, windspd);
-        % Graph a second line plot of wind speed values only in the storm
-        % domain. Make the line green to indicate the storm domain.
-        wsh(4) = plot(stormstart:(1/24):stormend, ...
-            windspd((1 + round(24*(stormstart - graphstart(stormid)))): ...
-            (1 + round(24*(stormend - graphstart(stormid))))));
-        set(wsh(4), 'LineWidth', 2.5, 'Color', [0 .8 .4])
-        % Graph a second scatter plot of wind speed values only in the
-        % storm domain. Make the points dark green.
-        wsh(2) = scatter(stormstart:(1/24):stormend, ...
-            windspd((1 + round(24*(stormstart - graphstart(stormid)))): ...
-            (1 + round(24*(stormend - graphstart(stormid))))));
-        set(wsh(2), 'SizeData', 200, 'MarkerEdgeColor', [0 .5 0], 'Marker', '.')
-        hold off
-        
-        xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
-            'mmm dd, yyyy') ')'], AXES_FONT{:})
-        ylabel('Wind Speed (m/s)', AXES_FONT{:})
-        title('Wind Speed', TITLE_FONT{:})
-        set(gcf, 'PaperPositionMode', 'manual')
-        set(gcf, 'PaperUnits', 'inches')
-        set(gcf, 'PaperPosition', [0 0 11 8.5])
-        saveas(gcf, ['storms/' stormPage(stormid).wsp_graph])
-        clf(gcf)
+        if length(xvalues) == length(windspd)
+            wsh = scatter(xvalues, windspd);
+            set(gca, 'YGrid', 'on'), box on
+            set(wsh, 'SizeData', 150, 'Marker', '.')
+            
+            % Find x-values corresponding to the wind gusts
+            %         xofgusts = [gusts(~isnan([gusts.value])).date];
+            % Graph scatter plot of all wind gusts in graph domain.
+            %         wsh(5) = scatter(xofgusts, [gusts(~isnan([gusts.value])).value]);
+            %         clear xofgusts
+            %         set(wsh(5), 'Marker', '+', 'MarkerEdgeColor', 'r')
+            % Graph line plot of all wind speed values in graph domain.
+            wsh(3) = plot(xvalues, windspd);
+            % Graph a second line plot of wind speed values only in the storm
+            % domain. Make the line green to indicate the storm domain.
+            wsh(4) = plot(stormstart:(1/24):stormend, ...
+                windspd((1 + round(24*(stormstart - graphstart(stormid)))): ...
+                (1 + round(24*(stormend - graphstart(stormid))))));
+            set(wsh(4), 'LineWidth', 2.5, 'Color', [0 .8 .4])
+            % Graph a second scatter plot of wind speed values only in the
+            % storm domain. Make the points dark green.
+            wsh(2) = scatter(stormstart:(1/24):stormend, ...
+                windspd((1 + round(24*(stormstart - graphstart(stormid)))): ...
+                (1 + round(24*(stormend - graphstart(stormid))))));
+            set(wsh(2), 'SizeData', 200, 'MarkerEdgeColor', [0 .5 0], 'Marker', '.')
+            hold off
+            
+            xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
+                'mmm dd, yyyy') ')'], AXES_FONT{:})
+            ylabel('Wind Speed (m/s)', AXES_FONT{:})
+            title('Wind Speed', TITLE_FONT{:})
+            set(gcf, 'PaperPositionMode', 'manual')
+            set(gcf, 'PaperUnits', 'inches')
+            set(gcf, 'PaperPosition', [0 0 11 8.5])
+            saveas(gcf, ['storms/' stormPage(stormid).wsp_graph])
+            clf(gcf)
+        else
+            fprintf('Error creating wind speed graph for storm %d\n',stormid)
+        end
         clear wsh yscale ylims yticks
       end
         
@@ -607,27 +605,31 @@ while stormid <= length(date_range)
         set(gca, 'YTick', yticks)
         datetick('x', 'HH', 'keeplimits', 'keepticks')
         hold on
-        wdh = scatter(xvalues, winddir);
-        set(gca, 'YGrid', 'on'), box on
-        set(wdh, 'SizeData', 150, 'Marker', '.')
-        
-        % Graph second scatter plot of wind direction values only in the
-        % storm domain. Make the points dark green.
-        wdh(2) = scatter(stormstart:(1/24):stormend, ...
-            winddir((1 + round(24*(stormstart - graphstart(stormid)))): ...
-            (1 + round(24*(stormend - graphstart(stormid))))));
-        set(wdh(2), 'SizeData', 200, 'MarkerEdgeColor', [0 .8 .4], 'Marker', '.')
-        hold off
-        
-        xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
-            'mmm dd, yyyy') ')'], AXES_FONT{:})
-        ylabel('Wind Direction (Compass {\circ})', AXES_FONT{:})
-        title('Wind Direction', TITLE_FONT{:})
-        set(gcf, 'PaperPositionMode', 'manual')
-        set(gcf, 'PaperUnits', 'inches')
-        set(gcf, 'PaperPosition', [0 0 11 8.5])
-        saveas(gcf, ['storms/' stormPage(stormid).wdir_graph])
-        clf(gcf)
+        if length (xvalues) == length(winddir)
+            wdh = scatter(xvalues, winddir);
+            set(gca, 'YGrid', 'on'), box on
+            set(wdh, 'SizeData', 150, 'Marker', '.')
+            
+            % Graph second scatter plot of wind direction values only in the
+            % storm domain. Make the points dark green.
+            wdh(2) = scatter(stormstart:(1/24):stormend, ...
+                winddir((1 + round(24*(stormstart - graphstart(stormid)))): ...
+                (1 + round(24*(stormend - graphstart(stormid))))));
+            set(wdh(2), 'SizeData', 200, 'MarkerEdgeColor', [0 .8 .4], 'Marker', '.')
+            hold off
+            
+            xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
+                'mmm dd, yyyy') ')'], AXES_FONT{:})
+            ylabel('Wind Direction (Compass {\circ})', AXES_FONT{:})
+            title('Wind Direction', TITLE_FONT{:})
+            set(gcf, 'PaperPositionMode', 'manual')
+            set(gcf, 'PaperUnits', 'inches')
+            set(gcf, 'PaperPosition', [0 0 11 8.5])
+            saveas(gcf, ['storms/' stormPage(stormid).wdir_graph])
+            clf(gcf)
+        else
+            fprintf('Error creating wind direction graph for storm %d\n',stormid)
+        end
         clear wdh yscale ylims yticks
       end
         
@@ -652,111 +654,121 @@ while stormid <= length(date_range)
         set(gca, 'YTick', yticks)
         datetick('x', 'HH', 'keeplimits', 'keepticks')
         hold on
-        rh_h = scatter(xvalues, relhumidity);
-        set(gca, 'YGrid', 'on'), box on
-        set(rh_h, 'SizeData', 150, 'Marker', '.')
-        
-        % Graph line plot of all relative humidity values in graph domain.
-        rh_h(3) = plot(xvalues, relhumidity);
-        % Graph second line plot of relative humidity values only in the
-        % storm domain. Make the line green to indicate the storm domain.
-        rh_h(4) = plot(stormstart:(1/24):stormend, ...
-            relhumidity((1 + round(24*(stormstart - graphstart(stormid)))): ...
-            (1 + round(24*(stormend - graphstart(stormid))))));
-        set(rh_h(4), 'LineWidth', 2.5, 'Color', [0 .8 .4])
-        % Graph second scatter plot of relative humidity values only in the
-        % storm domain. Make the points dark green.
-        rh_h(2) = scatter(stormstart:(1/24):stormend, ...
-            relhumidity((1 + round(24*(stormstart - graphstart(stormid)))): ...
-            (1 + round(24*(stormend - graphstart(stormid))))));
-        set(rh_h(2), 'SizeData', 200, 'MarkerEdgeColor', [0 .5 0], 'Marker', '.')
-        hold off
-        
-        xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
-            'mmm dd, yyyy') ')'], AXES_FONT{:})
-        ylabel('Relative Humidity (%)', AXES_FONT{:})
-        title('Relative Humidity', TITLE_FONT{:})
-        set(gcf, 'PaperPositionMode', 'manual')
-        set(gcf, 'PaperUnits', 'inches')
-        set(gcf, 'PaperPosition', [0 0 11 8.5])
-        saveas(gcf, ['storms/' stormPage(stormid).rh_graph])
-        clf(gcf)
+        if length(xvalues) == length(relhumidity)
+            rh_h = scatter(xvalues, relhumidity);
+            set(gca, 'YGrid', 'on'), box on
+            set(rh_h, 'SizeData', 150, 'Marker', '.')
+            
+            % Graph line plot of all relative humidity values in graph domain.
+            rh_h(3) = plot(xvalues, relhumidity);
+            % Graph second line plot of relative humidity values only in the
+            % storm domain. Make the line green to indicate the storm domain.
+            rh_h(4) = plot(stormstart:(1/24):stormend, ...
+                relhumidity((1 + round(24*(stormstart - graphstart(stormid)))): ...
+                (1 + round(24*(stormend - graphstart(stormid))))));
+            set(rh_h(4), 'LineWidth', 2.5, 'Color', [0 .8 .4])
+            % Graph second scatter plot of relative humidity values only in the
+            % storm domain. Make the points dark green.
+            rh_h(2) = scatter(stormstart:(1/24):stormend, ...
+                relhumidity((1 + round(24*(stormstart - graphstart(stormid)))): ...
+                (1 + round(24*(stormend - graphstart(stormid))))));
+            set(rh_h(2), 'SizeData', 200, 'MarkerEdgeColor', [0 .5 0], 'Marker', '.')
+            hold off
+            
+            xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
+                'mmm dd, yyyy') ')'], AXES_FONT{:})
+            ylabel('Relative Humidity (%)', AXES_FONT{:})
+            title('Relative Humidity', TITLE_FONT{:})
+            set(gcf, 'PaperPositionMode', 'manual')
+            set(gcf, 'PaperUnits', 'inches')
+            set(gcf, 'PaperPosition', [0 0 11 8.5])
+            saveas(gcf, ['storms/' stormPage(stormid).rh_graph])
+            clf(gcf)
+        else
+            fprintf('Error creating humidity graph for storm %d\n',stormid)
+        end
         clear rh_h yscale ylims yticks
       end
         
       %%% Precipitation graph %%%:
-      if ~isfield(settings, 'choose_graphs') || ...
-              (isfield(settings, 'choose_graphs') && isfield(settings, 'graph_precip'))
-        % Consider possibility of no rain in a storm...
-        if isnan(max(precip)) || (max(precip) == 0 && isfield(settings, 'is_alta'))
-            % No precipitation was observed reaching the ground. Do not
-            % make a graph, simply put text in a fake graph and continue.
-            ylims = [0 2.5];
-            xlims = [graphstart(stormid) graphend(stormid)];
-            hold on
-            figure(1), set(gcf, 'visible', 'off')
-            xposition = graphstart(stormid) + ...
-                ((graphend(stormid) - graphstart(stormid)) / 2);
-            ylim(ylims), xlim(xlims), datetick('x','HH','keeplimits','keepticks')
-            txt = text(xposition, 0.05, 'No precipitation reaching the ground.');
-            set(txt, 'FontSize', 18, 'HorizontalAlignment', 'center')
-            hold off
-        else
-            if max(precip) == 0
-                yscale = 0.2; ylims = [-0.25 2.05];
-            elseif max(precip) < 2.5
-                yscale = 0.2; ylims = [-0.1 2.5];
-            else
-                yscale = floor(max(precip) * 10) / 100;
-                ylims = [-0.01 (max(precip) + 0.25)];
-            end
-            xlims = [graphstart(stormid) graphend(stormid)];
-            yticks = 0:yscale:ylims(2);
-
-            figure(1), set(gcf, 'visible', 'off')
-            % Graph line plot of all precipitation values in graph domain.
-            ylim(ylims)
-            xlim(xlims)
-            set(gca, 'XTick', xticks)
-            set(gca, 'YTick', yticks)
-            datetick('x', 'HH', 'keeplimits', 'keepticks')
-            set(gca, 'YGrid', 'on'), box on
-            hold on
-            preciph = plot(xvalues, precip);
-            set(preciph, 'Color', 'r', 'LineWidth', 1.5)
-            
-            % Graph second line plot of precipitation values only in the
-            % storm domain. Make the line green to indicate storm domain.
-            preciph(2) = plot((stormstart-(1/24)):(1/24):stormend, ...
-                precip((1 + round(24*((stormstart-(1/24)) - graphstart(stormid)))): ...
-                (1 + round(24*(stormend - graphstart(stormid))))));
-            set(preciph(2), 'LineWidth', 2.5) 
-            set(preciph(2), 'Color', [0 .8 .4])
-            
-            % Graph scatter plot of all precipitation values in graph
-            % domain.
-            preciph(3) = scatter(xvalues, precip);
-            set(preciph(3), 'MarkerEdgeColor', [.5 0 0], 'Marker', '.', 'SizeData', 100)
-            
-            % Graph second scatter plot of precipitation values only in the
-            % storm domain. Make the points dark green.
-            preciph(4) = scatter(stormstart:(1/24):stormend, ...
-                precip((1 + round(24*(stormstart - graphstart(stormid)))): ...
-                (1 + round(24*(stormend - graphstart(stormid))))));
-            set(preciph(4), 'MarkerEdgeColor', [0 .5 0], 'Marker', '.', 'SizeData', 150)
-            hold off
-        end
-        
-        xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
-            'mmm dd, yyyy') ')'], AXES_FONT{:})
-        ylabel('Precipitation (mm)', AXES_FONT{:})
-        title('Precipitation', TITLE_FONT{:})
-        set(gcf, 'PaperPositionMode', 'manual')
-        set(gcf, 'PaperUnits', 'inches')
-        set(gcf, 'PaperPosition', [0 0 11 8.5])
-        saveas(gcf, ['storms/' stormPage(stormid).uprad_graph])
-        clf(gcf)
-        clear preciph yscale ylims yticks xlims xposition txt
+      if length(xvalues) == length(precip)
+          if ~isfield(settings, 'choose_graphs') || ...
+                  (isfield(settings, 'choose_graphs') && isfield(settings, 'graph_precip'))
+              % Consider possibility of no rain in a storm...
+              if isnan(max(precip)) || (max(precip) == 0 && isfield(settings, 'is_alta'))
+                  % No precipitation was observed reaching the ground. Do not
+                  % make a graph, simply put text in a fake graph and continue.
+                  ylims = [0 2.5];
+                  xlims = [graphstart(stormid) graphend(stormid)];
+                  hold on
+                  figure(1), set(gcf, 'visible', 'off')
+                  xposition = graphstart(stormid) + ...
+                      ((graphend(stormid) - graphstart(stormid)) / 2);
+                  ylim(ylims), xlim(xlims), datetick('x','HH','keeplimits','keepticks')
+                  txt = text(xposition, 0.05, 'No precipitation reaching the ground.');
+                  set(txt, 'FontSize', 18, 'HorizontalAlignment', 'center')
+                  hold off
+              else
+                  if max(precip) == 0
+                      yscale = 0.2; ylims = [-0.25 2.05];
+                  elseif max(precip) < 2.5
+                      yscale = 0.2; ylims = [-0.1 2.5];
+                  else
+                      yscale = floor(max(precip) * 10) / 100;
+                      ylims = [-0.01 (max(precip) + 0.25)];
+                  end
+                  xlims = [graphstart(stormid) graphend(stormid)];
+                  yticks = 0:yscale:ylims(2);
+                  
+                  figure(1), set(gcf, 'visible', 'off')
+                  % Graph line plot of all precipitation values in graph domain.
+                  ylim(ylims)
+                  xlim(xlims)
+                  set(gca, 'XTick', xticks)
+                  set(gca, 'YTick', yticks)
+                  datetick('x', 'HH', 'keeplimits', 'keepticks')
+                  set(gca, 'YGrid', 'on'), box on
+                  hold on
+                  preciph = bar(xvalues, precip);
+                  set(preciph, 'FaceColor', 'r')%, 'LineWidth', 1.5)
+                  set(preciph, 'ShowBaseLine', 'off')
+                  
+                  % Graph second line plot of precipitation values only in the
+                  % storm domain. Make the line green to indicate storm domain.
+                  preciph(2) = bar((stormstart-(1/24)):(1/24):stormend, ...
+                      precip((1 + round(24*((stormstart-(1/24)) - graphstart(stormid)))): ...
+                      (1 + round(24*(stormend - graphstart(stormid))))));
+%                   set(preciph(2), 'LineWidth', 2.5)
+                  set(preciph(2), 'FaceColor', [0 .8 .4])
+                  set(preciph(2), 'ShowBaseLine', 'off')
+                  
+                  % Graph scatter plot of all precipitation values in graph
+                  % domain.
+%                   preciph(3) = scatter(xvalues, precip);
+%                   set(preciph(3), 'MarkerEdgeColor', [.5 0 0], 'Marker', '.', 'SizeData', 100)
+                  
+                  % Graph second scatter plot of precipitation values only in the
+                  % storm domain. Make the points dark green.
+%                   preciph(4) = scatter(stormstart:(1/24):stormend, ...
+%                       precip((1 + round(24*(stormstart - graphstart(stormid)))): ...
+%                       (1 + round(24*(stormend - graphstart(stormid))))));
+%                   set(preciph(4), 'MarkerEdgeColor', [0 .5 0], 'Marker', '.', 'SizeData', 150)
+                  hold off
+              end
+              
+              xlabel(['Time (Hrs, starting at ' datestr(graphstart(stormid), ...
+                  'mmm dd, yyyy') ')'], AXES_FONT{:})
+              ylabel('Precipitation (mm)', AXES_FONT{:})
+              title('Precipitation', TITLE_FONT{:})
+              set(gcf, 'PaperPositionMode', 'manual')
+              set(gcf, 'PaperUnits', 'inches')
+              set(gcf, 'PaperPosition', [0 0 11 8.5])
+              saveas(gcf, ['storms/' stormPage(stormid).uprad_graph])
+              clf(gcf)
+              clear preciph yscale ylims yticks xlims xposition txt
+          end
+      else
+          fprintf('Error creating precipitaton graph for storm %d\n',stormid)
       end
         
       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -776,19 +788,19 @@ while stormid <= length(date_range)
     if foundgraphstart
         graphcounter = graphcounter + 1;
 
-        if ~isfield(settings, 'is_alta')
+%         if ~isfield(settings, 'is_alta')
             pressure(graphcounter) = metarStruct(counter).pres;
-        end
+%         end
         temperature(graphcounter) = metarStruct(counter).temp;
         relhumidity(graphcounter) = metarStruct(counter).relhum;
         windspd(graphcounter) = metarStruct(counter).wspd;
-        gusts(graphcounter).value = metarStruct(counter).gust;
-        gusts(graphcounter).date = serialdate;
-        if isfield(settings, 'is_alta')
-            windspdWildcat(graphcounter) = metarStruct(counter).wildcatWspd;
-            gustsWildcat(graphcounter) = metarStruct(counter).wildcatGust;
-        end
-        if metarStruct(counter).wdir == 990 % Variable winds
+%         gusts(graphcounter).value = metarStruct(counter).gust;
+%         gusts(graphcounter).date = serialdate;
+%         if isfield(settings, 'is_alta')
+%             windspdWildcat(graphcounter) = metarStruct(counter).wildcatWspd;
+%             gustsWildcat(graphcounter) = metarStruct(counter).wildcatGust;
+%         end
+        if isnan(metarStruct(counter).wdir) % Variable winds
             winddir(graphcounter) = NaN;
         else
             winddir(graphcounter) = metarStruct(counter).wdir;
@@ -798,7 +810,7 @@ while stormid <= length(date_range)
         elseif metarStruct(counter).precip1 == -1 % Trace amount
             precip(graphcounter) = 0;
         else
-            precip(graphcounter) = metarStruct(counter).precip1;
+            precip(graphcounter) = metarStruct(counter).precip1;          
         end
         
     % Checks if the metar data being examined matches the date of the graph
@@ -877,29 +889,29 @@ while stormid <= length(date_range)
         stormcounter = stormcounter + 1;        
         
         % Update the total precipitation count
-        if stormcounter > 24 && metarStruct(counter).precip24 > 0
-            totalprecip = totalprecip + metarStruct(counter).precip24;
-            
+%         if stormcounter > 24 && metarStruct(counter).precip24 > 0
+%             totalprecip = totalprecip + metarStruct(counter).precip24;
+%             
             % Subtract the 6 hour precip counts that were added to the
             % totalprecip count in the 24 hour window.
-            for j = (counter - 23):counter
-                if metarStruct(j).precip6 > 0
-                    totalprecip = totalprecip - metarStruct(j).precip6;
-                end
-            end
-        end
-        if stormcounter > 6 && metarStruct(counter).precip6 > 0
-            totalprecip = totalprecip + metarStruct(counter).precip6;
-            
-            % Subtract the 1 hour precip counts that were added to the
-            % totalprecip count in the 6 hour window.
-            for j = (counter - 5):counter
-                if metarStruct(j).precip1 > 0
-                    totalprecip = totalprecip - metarStruct(j).precip1;
-                end
-            end
-        end
-        if metarStruct(counter).precip1 > 0
+%             for j = (counter - 23):counter
+%                 if metarStruct(j).precip6 > 0
+%                     totalprecip = totalprecip - metarStruct(j).precip6;
+%                 end
+%             end
+%         end
+%         if stormcounter > 6 && metarStruct(counter).precip6 > 0
+%             totalprecip = totalprecip + metarStruct(counter).precip6;
+%             
+%             % Subtract the 1 hour precip counts that were added to the
+%             % totalprecip count in the 6 hour window.
+%             for j = (counter - 5):counter
+%                 if metarStruct(j).precip1 > 0
+%                     totalprecip = totalprecip - metarStruct(j).precip1;
+%                 end
+%             end
+%         end
+        if metarStruct(counter).precip1 > 0                                
             totalprecip = totalprecip + metarStruct(counter).precip1;
             
         elseif metarStruct(counter).precip1 < 0
@@ -928,7 +940,7 @@ while stormid <= length(date_range)
     
 end
 
-fprintf('complete.\n')
+fprintf('...complete.\n')
 
 end
 

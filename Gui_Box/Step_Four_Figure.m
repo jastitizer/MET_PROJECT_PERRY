@@ -134,8 +134,8 @@ function savePathButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global guiStruct
-  [fileName,filePath , ~] = uigetfile('.mat', 'Save As');
-set(findobj('Tag','openPathEdit'), 'String', [filePath,fileName]);
+  [fileName,filePath , ~] = uiputfile('.mat', 'Save As');
+set(findobj('Tag','savePathEdit'), 'String', [filePath,fileName]);
 guiStruct.matFilePath = fileName;
 
 % --- Executes on button press in goButton.
@@ -144,8 +144,8 @@ function goButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global guiStruct
-guiStruct.metarfilepath = get(findobj('Tag','savePathEdit'),'String');
-guiStruct.savefilepath = get(findobj('Tag','openPathEdit'),'String');
+guiStruct.savefilepath = get(findobj('Tag','savePathEdit'),'String');
+guiStruct.metarfilepath = get(findobj('Tag','openPathEdit'),'String');
 guiStruct.metartype = get(findobj('Tag','metartypeEdit'),'String');
 guiStruct.minuteinterval = get(findobj('Tag','intervalEdit'),'String');
 close
