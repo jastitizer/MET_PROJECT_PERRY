@@ -22,7 +22,7 @@ function varargout = Step_Three_Figure(varargin)
 
 % Edit the above text to modify the response to help Step_Three_Figure
 
-% Last Modified by GUIDE v2.5 08-Jan-2016 12:59:30
+% Last Modified by GUIDE v2.5 16-Jan-2016 20:16:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,7 +59,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % UIWAIT makes Step_Three_Figure wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+ uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -70,8 +70,13 @@ function varargout = Step_Three_Figure_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
-varargout{1} = handles.output;
+parameters.Z_threshhold = get(findobj('Tag','edgeEdit'),'String');
+parameters.Z_threshhold_2 = get(findobj('Tag','reflectivityEdit'),'String');
+parameters.skip4 = get(findobj('Tag','reflectivityEdit'),'String');
 
+varargout{1} = parameters ;
+% The figure can be deleted now
+delete(handles.figure1);
 
 
 function reflectivityEdit_Callback(hObject, eventdata, handles)
@@ -124,7 +129,41 @@ function goButton_Callback(hObject, eventdata, handles)
 % hObject    handle to goButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global guiStruct
-guiStruct.Z_threshhold = get(findobj('Tag','edgeEdit'),'String');
-guiStruct.Z_threshhold_2 = get(findobj('Tag','reflectivityEdit'),'String');
+global parameters 
+parameters.guiFlow = 1;
+close
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+if isequal(get(hObject, 'waitstatus'), 'waiting')
+% The GUI is still in UIWAIT, us UIRESUME
+uiresume(hObject);
+else
+% The GUI is no longer waiting, just close it
+delete(hObject);
+end
+
+
+% --- Executes on button press in skip4Check.
+function skip4Check_Callback(hObject, eventdata, handles)
+% hObject    handle to skip4Check (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of skip4Check
+
+
+% --- Executes on button press in backButton.
+function backButton_Callback(hObject, eventdata, handles)
+% hObject    handle to backButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global parameters
+parameters.guiFlow = -1;
 close

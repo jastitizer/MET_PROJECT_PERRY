@@ -22,7 +22,7 @@ function varargout = Step_Four_Figure(varargin)
 
 % Edit the above text to modify the response to help Step_Four_Figure
 
-% Last Modified by GUIDE v2.5 09-Jan-2016 02:31:32
+% Last Modified by GUIDE v2.5 16-Jan-2016 20:35:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,7 +59,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % UIWAIT makes Step_Four_Figure wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+ uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -70,8 +70,14 @@ function varargout = Step_Four_Figure_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
-varargout{1} = handles.output;
-
+global parameters
+parameters.savefilepath = get(findobj('Tag','savePathEdit'),'String');
+parameters.metarfilepath = get(findobj('Tag','openPathEdit'),'String');
+parameters.metartype = get(findobj('Tag','metartypeEdit'),'String');
+parameters.minuteinterval = get(findobj('Tag','intervalEdit'),'String');
+varargout{1} = parameters ;
+% The figure can be deleted now
+delete(handles.figure1);
 
 
 function openPathEdit_Callback(hObject, eventdata, handles)
@@ -102,7 +108,7 @@ function openPathButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-  [fileName,filePath , ~] = uigetfile('.mat', 'Choose Surface Data Txt File');
+  [fileName,filePath , ~] = uigetfile('.txt', 'Choose Surface Data Txt File');
 set(findobj('Tag','openPathEdit'), 'String', [filePath,fileName]);
 
 
@@ -133,21 +139,18 @@ function savePathButton_Callback(hObject, eventdata, handles)
 % hObject    handle to savePathButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global guiStruct
+global parameters
   [fileName,filePath , ~] = uiputfile('.mat', 'Save As');
 set(findobj('Tag','savePathEdit'), 'String', [filePath,fileName]);
-guiStruct.matFilePath = fileName;
+parameters.matFilePath = fileName;
 
 % --- Executes on button press in goButton.
 function goButton_Callback(hObject, eventdata, handles)
 % hObject    handle to goButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global guiStruct
-guiStruct.savefilepath = get(findobj('Tag','savePathEdit'),'String');
-guiStruct.metarfilepath = get(findobj('Tag','openPathEdit'),'String');
-guiStruct.metartype = get(findobj('Tag','metartypeEdit'),'String');
-guiStruct.minuteinterval = get(findobj('Tag','intervalEdit'),'String');
+global parameters 
+parameters.guiFlow = 1;
 close
 
 function metartypeEdit_Callback(hObject, eventdata, handles)
@@ -193,3 +196,29 @@ function intervalEdit_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+if isequal(get(hObject, 'waitstatus'), 'waiting')
+% The GUI is still in UIWAIT, us UIRESUME
+uiresume(hObject);
+else
+% The GUI is no longer waiting, just close it
+delete(hObject);
+end
+
+
+% --- Executes on button press in backButton.
+function backButton_Callback(hObject, eventdata, handles)
+% hObject    handle to backButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global parameters 
+parameters.guiFlow = -1;
+close;

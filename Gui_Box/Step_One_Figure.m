@@ -26,7 +26,7 @@ function varargout = Step_One_Figure(varargin)
 
 % Edit the above text to modify the response to help Step_One_Figure
 
-% Last Modified by GUIDE v2.5 08-Jan-2016 12:39:58
+% Last Modified by GUIDE v2.5 16-Jan-2016 20:35:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -63,7 +63,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % UIWAIT makes Step_One_Figure wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -74,8 +74,17 @@ function varargout = Step_One_Figure_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
-varargout{1} = handles.output;
 
+parameters.directory = get(findobj('Tag','directoryEdit'),'String');
+parameters.prefix = get(findobj('Tag','prefixEdit'), 'String');
+parameters.suffix= get(findobj('Tag','suffixEdit'), 'String');
+parameters.datestart = get(findobj('Tag','startdateEdit'),'String');
+parameters.dateend = get(findobj('Tag','enddateEdit'), 'String');
+parameters.records_per_file = str2double(get(findobj('Tag','numrowsEdit'),'String'));
+parameters.ukoln_toggle = get(findobj('Tag','ukoln_toggle'),'Value');
+varargout{1} = parameters 
+% The figure can be deleted now
+delete(handles.figure1);
 
 
 
@@ -226,17 +235,28 @@ set(findobj('Tag','directoryEdit'), 'String', filePath);
 
 % --- Executes on button press in goButton.
 function goButton_Callback(hObject, eventdata, handles)
-global guiStruct
 % hObject    handle to goButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-guiStruct.directory = get(findobj('Tag','directoryEdit'),'String');
-guiStruct.prefix = get(findobj('Tag','prefixEdit'), 'String');
-guiStruct.suffix= get(findobj('Tag','suffixEdit'), 'String');
-guiStruct.datestart = get(findobj('Tag','startdateEdit'),'String');
-guiStruct.dateend = get(findobj('Tag','enddateEdit'), 'String');
-guiStruct.records_per_file = str2double(get(findobj('Tag','numrowsEdit'),'String'));
-guiStruct.ukoln_toggle = get(findobj('Tag','ukoln_toggle'),'Value');
-dummer = 'dummer';
 
+
+dummer = 'dummer';
+global parameters 
+parameters.guiFlow = 1;
 close(); 
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+if isequal(get(hObject, 'waitstatus'), 'waiting')
+% The GUI is still in UIWAIT, us UIRESUME
+    uiresume(hObject);
+else
+% The GUI is no longer waiting, just close it
+    delete(hObject);
+end
