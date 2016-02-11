@@ -70,6 +70,7 @@ function varargout = Step_Three_Figure_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
+global parameters
 parameters.Z_threshhold = get(findobj('Tag','edgeEdit'),'String');
 parameters.Z_threshhold_2 = get(findobj('Tag','reflectivityEdit'),'String');
 parameters.skip4 = get(findobj('Tag','reflectivityEdit'),'String');

@@ -74,7 +74,7 @@ function varargout = Step_One_Figure_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
-
+global parameters
 parameters.directory = get(findobj('Tag','directoryEdit'),'String');
 parameters.prefix = get(findobj('Tag','prefixEdit'), 'String');
 parameters.suffix= get(findobj('Tag','suffixEdit'), 'String');
