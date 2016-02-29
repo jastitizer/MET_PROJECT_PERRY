@@ -78,7 +78,7 @@ parameters.datestart = get(findobj('Tag','startdateEdit'),'String');
 parameters.dateend = get(findobj('Tag','enddateEdit'), 'String');
 parameters.records_per_file = str2double(get(findobj('Tag','numrowsEdit'),'String'));
 parameters.ukoln_toggle = get(findobj('Tag','ukoln_toggle'),'Value');
-varargout{1} = parameters 
+varargout{1} = parameters ;
 % The figure can be deleted now
 delete(handles.figure1);
 
@@ -178,6 +178,7 @@ function goButton_Callback(hObject, eventdata, handles)
 % hObject    handle to goButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%set guiFlow to forward and close
 global parameters 
 parameters.guiFlow = 1;
 close();
@@ -211,6 +212,8 @@ function homeBroseButton_Callback(hObject, eventdata, handles)
 % hObject    handle to homeBroseButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+%Get path for 'home' button on webpage. 
 [~,filePath,~] = uigetfile('.html');
 set(findobj('Tag','homePathEdit'),'String',filePath);
 global parameters

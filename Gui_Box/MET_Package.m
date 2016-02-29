@@ -12,6 +12,9 @@ guiStruct.guiFlow = 1;
 while guiState < 4
     [guiStruct,settings] = openFig(guiStruct, guiState,settings);
     guiState = guiState + guiStruct.guiFlow;
+    if guiState < 0
+        guiState  = 5;
+    end
 end
 % - htmlfile: File name of your frontpage html file.
 % - homelocation: Relative path you want to set for the “Home” button in each storm.  
